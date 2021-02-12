@@ -1,0 +1,139 @@
+<html>
+
+<head>
+    <title style="text-align: center;">Classes</title>
+    <script src="https://unpkg.com/vue"></script>
+    <script src="lessons.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+</head>
+
+<body>
+    <div id="app">
+        <header>
+            <h1 v-text="sitename"></h1>
+            <button v-on:click='showCheckout' v-on:click="Checkout" v-if='cartItemCount > 0' style="font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;">
+                {{cartItemCount}}
+                <span class="fas fa-cart-plus"></span> Checkout
+            </button>
+        </header>
+
+        <main>
+            <div v-if='showProduct'>
+                <div v-for="product in sortedProducts">
+                    <h2 v-text="product.title"></h2>
+                    <figure>
+                        <img v-bind:src="product.image">
+                    </figure>
+                    <p v-html="product.description"></p>
+                    <p>Price: {{product.price}}</p>
+                    <p>Spaces: {{product.availableInventory - cartItemCount}}</p>
+                    <button v-on:click='addToCart(product)' v-if='canAddToCart(product)'>Add to cart</button>
+                    <button disabled="disabled" v-else>Add to cart</button>
+                  
+                </div>
+            </div>
+
+            <div v-else>
+                <h2 style="text-align:center;">Checkout</h2>
+
+                <h2 style="font-family: Verdana, Geneva, Tahoma, sans-serif;">Your Cart</h2>
+                <div v-for="product in cart">
+                    <p>Subject: {{products.title}}</p>
+                    <p>Location: {{products.description}}</p>
+                    <p>Price: {{products.price}}</p>
+                    <p>Spaces: {{products.availableInventory}}</p>
+                    <button v-on:click="removeFromCart">Remove</button>
+                </div>
+            </div>
+
+            <div class="checkout">
+                <h1>Checkout</h1>
+                <form action="" method="POST">
+                    <input type="text" required v-model="order.name">
+                    <input type="number" required v-model="order.phone">
+                    <button type="submit" v-on:click="submitForm()"></button>
+                </form>
+
+            </div>
+
+                <p>
+                    <strong>Name:</strong>
+                    <input v-model.trim="order.Name" />
+                </p>
+                <p>
+                    <strong>Phone:</strong>
+                    <input v-model.trim="order.Phone" />
+                    
+                </p>
+
+                <h2 style="font-family: Verdana, Geneva, Tahoma, sans-serif;">Order Information</h2>
+                <p>Name: {{order.Name}}</p>
+                <p>Phone: {{order.Phone}}</p>
+                <button v-on:click="submitForm">Place Order</button>
+                <button v-on:click="showCheckout">Back</button>
+            </div>
+        </main>
+    </div>
+
+    <script type="text/javascript">
+        var webstore = new Vue({
+            el: '#app',
+            data: {
+                sitename: 'Classes',
+                products: products,
+                cart: [],
+                showProduct: true,
+                order: {
+                    Name: '',
+                    Phone: '',
+                },
+
+            },
+          
+            methods: {
+                addToCart(product) {
+                    this.cart.push(product.id);
+                },
+                removeFromCart(product){
+                    this.cart.splice(product.id);
+                },
+                showCheckout() {
+                    this.showProduct = this.showProduct ? false : true;
+                },
+                submitForm() {
+                    alert('Order submitted!')
+                },
+                canAddToCart(product) {
+                    return product.availableInventory > this.cartCount(product.id);
+                },
+                cartCount(id) {
+                    let count = 0;
+                    for (let i = 0; i < this.cart.length; i++) {
+                        if (this.cart[i] === id) {
+                            count++
+                        }
+                    }
+                    return count;
+                }
+            },
+            computed: {
+                cartItemCount() {
+                    return this.cart.length;
+                },
+                sortedProducts() {
+                    let productsArray = this.products.slice(0);
+                    function compare(a, b) {
+                        if (a.price > b.price)
+                            return 1;
+                        if (a.price < b.price)
+                            return -1;
+                        return 0;
+                    }
+                    return productsArray.sort(compare);
+                }
+            },
+        });
+    </script>
+</body>
+
+</html>
