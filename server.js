@@ -16,7 +16,7 @@ MongoClient.connect('mongodb+srv://bazaidkhan:Quad2646@cluster0.iyo6o.mongodb.ne
     db = client.db('Club')
 })
 
-app.get('/', (req, res, next) => {
+app.get('/index.html', (req, res, next) => {
     res.send('Select a collection, e.g., /collection/message')
 })
 
