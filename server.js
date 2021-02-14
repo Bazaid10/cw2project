@@ -2,6 +2,7 @@ const express = require('express')
 const app = express()
 
 app.use(express.json())
+app.use(express.static('public'));
 app.set('port',3000)
 app.use((req,res,next) => {
     res.setHeader('Access-Control-Allow-Origin',"*");
@@ -17,7 +18,8 @@ MongoClient.connect('mongodb+srv://bazaidkhan:Quad2646@cluster0.iyo6o.mongodb.ne
 })
 
 app.get('/', (req, res, next) => {
-    res.send('Select a collection, e.g., /collection/message')
+    res.render('index.html');
+    // res.send('Select a collection, e.g., /collection/message')
 })
 
 app.param('collectionName', (req, res, next, collectionName) => {

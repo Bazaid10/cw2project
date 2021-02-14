@@ -3,7 +3,7 @@
 <head>
     <title style="text-align: center;">Classes</title>
     <script src="https://unpkg.com/vue"></script>
-    <script src="lessons.js"></script>
+    <!-- <script src="lessons.js"></script> -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
 </head>
 
@@ -26,7 +26,7 @@
                     </figure>
                     <p v-html="product.description"></p>
                     <p>Price: {{product.price}}</p>
-                    <p>Spaces: {{product.availableInventory - cartItemCount}}</p>
+                    <p>Spaces: {{product.availableInventory - cartCount(product.id)}}</p>
                     <button v-on:click='addToCart(product)' v-if='canAddToCart(product)'>Add to cart</button>
                     <button disabled="disabled" v-else>Add to cart</button>
                   
@@ -38,10 +38,10 @@
 
                 <h2 style="font-family: Verdana, Geneva, Tahoma, sans-serif;">Your Cart</h2>
                 <div v-for="product in cart">
-                    <p>Subject: {{products.title}}</p>
-                    <p>Location: {{products.description}}</p>
-                    <p>Price: {{products.price}}</p>
-                    <p>Spaces: {{products.availableInventory}}</p>
+                    <p>Subject: {{product.title}}</p>
+                    <p>Location: {{product.description}}</p>
+                    <p>Price: {{product.price}}</p>
+                    <p>Spaces: {{product.availableInventory}}</p>
                     <button v-on:click="removeFromCart">Remove</button>
                 </div>
             </div>
@@ -71,7 +71,7 @@
             el: '#app',
             data: {
                 sitename: 'Classes',
-                products: products,
+                products: [],
                 cart: [],
                 showProduct: true,
                 order: {
@@ -83,10 +83,10 @@
           
             methods: {
                 addToCart(product) {
-                    this.cart.push(product.id);
+                    this.cart.push(product);
                 },
                 removeFromCart(product){
-                    this.cart.splice(product.id);
+                    this.cart.splice(product);
                 },
                 showCheckout() {
                     this.showProduct = this.showProduct ? false : true;
@@ -100,13 +100,36 @@
                 cartCount(id) {
                     let count = 0;
                     for (let i = 0; i < this.cart.length; i++) {
-                        if (this.cart[i] === id) {
+                        if (this.cart[i].id === id) {
                             count++
                         }
                     }
                     return count;
-                }
+                },
+                // cartCount(id) {
+                //     let count = 0;
+                //     for (let i = 0; i < this.cart.length; i++) {
+                //         if (this.cart[i] === id) {
+                //             count++
+                //         }
+                //     }
+                //     return count;
+                // }
             },
+            
+            created:  function(){
+                    fetch("http://localhost:3000/collection/products").then(
+                    function(res){
+                        res.json().then(
+                            function(json) {
+                                console.log(json);
+                                webstore.products = json;
+                            }
+                        )
+                        }
+                )
+                },
+            
             computed: {
                 cartItemCount() {
                     return this.cart.length;
