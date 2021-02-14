@@ -79,6 +79,7 @@
                 order: {
                     Name: '',
                     Phone: '',
+                    id:""
                 },
 
             },
@@ -94,6 +95,9 @@
                     this.showProduct = this.showProduct ? false : true;
                 },
                 submitForm() {
+                    for(let i = 0;i<this.cart.length;i++){
+                        webstore.order.id = this.cart[i].id;
+                    }
                     fetch('https://cw2project.herokuapp.com/collection/orders', {
                                 method: 'POST', // set the HTTP method as 'POST'
                                 headers: {
