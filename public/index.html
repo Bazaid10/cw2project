@@ -98,20 +98,22 @@
                     for(let i = 0;i<this.cart.length;i++){
                         webstore.order.id = this.cart[i].id;
                     }
-                fetch('https://cw2project.herokuapp.com/collection/orders', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json', 
-                            },
-                            cache: "no-store",
-                            body: JSON.stringify(webstore.order),
-                        })
-                        .then(response => response.json())
-                        .then(responseJSON => {})
-                        .catch((error) => {
-                            console.log(error);
-                        });
-                    alert('Order submitted!')
+                    
+                    fetch('https://cw2project.herokuapp.com/collection/orders', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json', 
+                                },
+                                cache: "no-store",
+                                body: JSON.stringify(webstore.order),
+                            })
+                            .then(response => response.json())
+                            .then(responseJSON => {})
+                            .catch((error) => {
+                                console.log(error);
+                            });
+                        alert('Order submitted!')
+
                 },
                 canAddToCart(product) {
                     return product.availableInventory > this.cartCount(product.id);
